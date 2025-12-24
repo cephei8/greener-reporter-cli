@@ -1,6 +1,7 @@
 # Greener Reporter - CLI
 CLI tool to report test results to [Greener](https://github.com/cephei8/greener).
 
+
 ## Contributing
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
