@@ -34,9 +34,10 @@ type Label struct {
 }
 
 type SessionRequest struct {
-	Id      *string        `json:"id,omitempty"`
-	Baggage map[string]any `json:"baggage,omitempty"`
-	Labels  []Label        `json:"labels,omitempty"`
+	Id          *string        `json:"id,omitempty"`
+	Description *string        `json:"description,omitempty"`
+	Baggage     map[string]any `json:"baggage,omitempty"`
+	Labels      []Label        `json:"labels,omitempty"`
 }
 
 type SessionResponse struct {
@@ -235,6 +236,11 @@ func createSessionAction(ctx context.Context, cmd *cli.Command) error {
 		sessionID = &id
 	}
 
+	var description *string
+	if desc := cmd.String("description"); desc != "" {
+		description = &desc
+	}
+
 	var baggage map[string]any
 	if baggageStr := cmd.String("baggage"); baggageStr != "" {
 		baggage, err = parseBaggage(baggageStr)
@@ -252,9 +258,10 @@ func createSessionAction(ctx context.Context, cmd *cli.Command) error {
 	}
 
 	req := SessionRequest{
-		Id:      sessionID,
-		Baggage: baggage,
-		Labels:  labels,
+		Id:          sessionID,
+		Description: description,
+		Baggage:     baggage,
+		Labels:      labels,
 	}
 
 	id, err := client.CreateSession(req)
@@ -377,6 +384,10 @@ func main() {
 							&cli.StringFlag{
 								Name:  "id",
 								Usage: "ID for the session",
+							},
+							&cli.StringFlag{
+								Name:  "description",
+								Usage: "Description of the session",
 							},
 							&cli.StringFlag{
 								Name:  "baggage",
